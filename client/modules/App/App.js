@@ -12,13 +12,24 @@ import Footer from './components/Footer/Footer';
 
 export class App extends Component {
   constructor(props) {
-    super(props);
-    this.state = { isMounted: false }
+    super(props)
+    this.state = {
+      isMounted: false,
+      addPinDropdownToggled: false
+    }
+    this.toggleAddPinDropdown = this.toggleAddPinDropdown.bind(this)
   }
+
 
   componentDidMount() {
     this.setState({isMounted: true}); // eslint-disable-line
   }
+
+
+  toggleAddPinDropdown(toggled = !this.state.addPinDropdownToggled) {
+    this.setState({ addPinDropdownToggled: toggled })
+  }
+
 
   // {this.state.isMounted && !window.devToolsExtension && process.env.NODE_ENV === 'development' && <DevTools />} move this 3 spaces down into the first div to reactivate
   render() {
@@ -40,7 +51,9 @@ export class App extends Component {
               },
             ]}
           />
-          <Header />
+          <Header
+            toggleAddPinDropdown={this.toggleAddPinDropdown}
+          />
           <div className={styles.container}>
             {this.props.children}
           </div>
