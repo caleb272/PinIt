@@ -11,8 +11,16 @@ import config from '../webpack.config.dev'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 
+// passport stuff
+import connectMongo from 'connect-mongo'
+import session from 'express-session'
+import passport from 'passport'
+import TwitterStrategy from 'passport-twitter'
+import User from './models/user'
+
 // Initialize the Express App
 const app = new Express()
+const MongoStore = connectMongo(session)
 
 // Run Webpack dev server in development mode
 if (process.env.NODE_ENV === 'development') {
@@ -51,7 +59,62 @@ app.use(compression())
 app.use(bodyParser.json({ limit: '20mb' }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }))
 app.use(Express.static(path.resolve(__dirname, '../dist')))
+/* passport uses */
+app.use(session({
+  secret: 'keyboard cat',
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+/* end of passport uses */
 app.use('/api', posts)
+
+/* PASSPORT STUFF */
+passport.serializeUser((user, done) => {
+  done(null, user._id)
+})
+
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
+    done(err, user)
+  })
+})
+
+const twitterStrategy = new TwitterStrategy(
+  {
+    consumerKey: serverConfig.twitterConsumerKey,
+    consumerSecret: serverConfig.secretTwitterConsumerKey,
+    callbackURL: serverConfig.twitterCallbackURL
+  },
+  (token, tokenSecret, profile, done) => {
+    User.findOne({ twitterId: profile.id })
+      .then(foundUser => {
+        if (!foundUser) {
+          const profilePic = profile.photos.length > 0 && profile.photos[0] ? profile.photos[0].value : ''
+          return new User({
+            twitterId: profile.id,
+            username: profile.username,
+            profilePic,
+            pins: []
+          })
+          .save()
+          .then(newUser => done(null, newUser))
+        }
+        return done(null, foundUser)
+      })
+      .catch(error => {
+        console.error(error)
+        return done(error, null)
+      })
+  }
+)
+
+passport.use(twitterStrategy)
+
+app.get('/login', passport.authenticate('twitter'))
+app.get('/login/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/' }))
+/* END OF PASSPORT STUFF */
+
 
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {
