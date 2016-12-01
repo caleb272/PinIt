@@ -11,6 +11,9 @@ import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import CreatePinDropdown from './components/CreatePinDropdown/CreatePinDropdown'
 
+import { requestGetUser } from './AppActions'
+import { getUser } from './AppReducer'
+
 export class App extends Component {
   constructor(props) {
     super(props)
@@ -24,6 +27,7 @@ export class App extends Component {
 
   componentDidMount() {
     this.setState({isMounted: true}); // eslint-disable-line
+    this.props.dispatch(requestGetUser())
   }
 
 
@@ -54,6 +58,7 @@ export class App extends Component {
           />
           <Header
             toggleAddPinDropdown={this.toggleAddPinDropdown}
+            isLoggedIn={Boolean(this.props.user)}
           />
           {
             this.state.showCreatePinDropdown
@@ -71,8 +76,15 @@ export class App extends Component {
 }
 
 App.propTypes = {
+  user: PropTypes.object,
   children: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
-export default connect()(App)
+function mapStateToProps(state) {
+  return {
+    user: getUser(state)
+  }
+}
+
+export default connect(mapStateToProps)(App)

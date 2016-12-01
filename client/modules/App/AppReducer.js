@@ -1,27 +1,27 @@
-// Import Actions
-import { TOGGLE_ADD_POST } from './AppActions';
+import { SET_USER } from './AppActions'
 
-// Initial State
 const initialState = {
-  showAddPost: false,
-};
+  user: null
+}
 
 const AppReducer = (state = initialState, action) => {
   switch (action.type) {
-    case TOGGLE_ADD_POST:
+    case SET_USER:
       return {
-        showAddPost: !state.showAddPost,
-      };
-
+        user: action.user
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
-/* Selectors */
+export function getUser(state) {
+  return state.app.user
+}
 
-// Get showAddPost
-export const getShowAddPost = state => state.app.showAddPost;
 
-// Export Reducer
-export default AppReducer;
+export function getShowAddPost() {
+  return false
+}
+
+export default AppReducer

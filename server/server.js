@@ -103,7 +103,7 @@ const twitterStrategy = new TwitterStrategy(
         return done(null, foundUser)
       })
       .catch(error => {
-        console.error(error)
+        console.error(error) // eslint-disable-line
         return done(error, null)
       })
   }
@@ -113,6 +113,14 @@ passport.use(twitterStrategy)
 
 app.get('/login', passport.authenticate('twitter'))
 app.get('/login/twitter/callback', passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/' }))
+app.get('/logout', (req, res) => {
+  req.logOut()
+  res.redirect('/')
+})
+
+app.get('/api/user', (req, res) => {
+  res.send({ data: (req.user || null) })
+})
 /* END OF PASSPORT STUFF */
 
 
@@ -182,6 +190,10 @@ app.use((req, res, next) => {
     }
 
     const store = configureStore()
+    store.dispatch({
+      type: 'SET_USER',
+      user: req.user || null
+    })
 
     return fetchComponentData(store, renderProps.components, renderProps.params)
       .then(() => {
