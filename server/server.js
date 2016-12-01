@@ -40,7 +40,7 @@ import Helmet from 'react-helmet'
 // Import required modules
 import routes from '../client/routes'
 import { fetchComponentData } from './util/fetchData'
-import posts from './routes/post.routes'
+import api from './routes/api.routes'
 import serverConfig from './config'
 
 // Set native promises as mongoose promise
@@ -67,7 +67,7 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 /* end of passport uses */
-app.use('/api', posts)
+app.use('/api', api)
 
 /* PASSPORT STUFF */
 passport.serializeUser((user, done) => {
@@ -166,6 +166,7 @@ const renderFullPage = (html, initialState) => {
     </html>
   `;
 };
+// <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
 
 const renderError = err => {
   const softTab = '&#32;&#32;&#32;&#32;';

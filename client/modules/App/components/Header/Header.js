@@ -18,7 +18,7 @@ export function Header(props, context) {
         <div className="nav-wrapper z-depth-2">
           <a className="brand-logo left" onClick={goHome}>PIN IT</a>
           {
-            props.isLoggedIn || true
+            props.isLoggedIn
                 ? <LoggedIn toggleAddPinDropdown={props.toggleAddPinDropdown} />
                 : <LoggedOut />
           }
@@ -38,18 +38,3 @@ Header.propTypes = {
 }
 
 export default Header
-
-// <div className={`${styles.header} navbar-fixed`}>
-//   <nav>
-//     <div className="nav-wrapper">
-//       <a className="brand-logo left" onClick={goHome}>PIN IT</a>
-//       <ul className="right">
-//         <li><a>Pins</a></li>
-//         <li><a>My Pins</a></li>
-//         <li
-//           onClick={() => props.toggleAddPinDropdown()}
-//         ><a>Add Pin<i className="material-icons right">arrow_drop_down</i></a></li>
-//       </ul>
-//     </div>
-//   </nav>
-// </div>

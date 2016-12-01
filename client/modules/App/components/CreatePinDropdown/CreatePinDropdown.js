@@ -1,6 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 
 import styles from './CreatePinDropdown.css'
+
+import { requestCreatePin } from '../../../Pin/PinActions'
 
 class CreatePinDropdown extends Component {
   constructor(props) {
@@ -11,12 +14,27 @@ class CreatePinDropdown extends Component {
       'description-field': ''
     }
 
-    this.onTextFieldChanged = this.onTextFieldChanged.bind(this)
+    this.onFormKeyPressed = this.onFormKeyPressed.bind(this)
+    this.createPin = this.createPin.bind(this)
   }
 
 
-  onTextFieldChanged(e) {
-    this.setState({ [e.target.id]: e.target.value })
+  onFormKeyPressed(e) {
+    if (e.key === 'Enter') {
+      this.createPin()
+    } else {
+      this.setState({ [e.target.id]: e.target.value })
+    }
+  }
+
+
+  createPin() {
+    const image = this.state['image-field']
+    const description = this.state['description-field']
+    if (image.length > 0 && description.length > 0) {
+      this.props.dispatch(requestCreatePin(image, description))
+      this.props.toggleAddPinDropdown()
+    }
   }
 
 
@@ -26,13 +44,12 @@ class CreatePinDropdown extends Component {
         <h5 className={`${styles.left} left`}>Add Pin</h5>
 
         <div className="row">
-          <form className="col s12">
+          <form className="col s12" onKeyDown={this.onFormKeyPressed} onChange={this.onFormKeyPressed}>
             <div className="row">
               <div className="input-field col s12">
                 <input
                   id="image-field"
                   type="url"
-                  onChange={this.onTextFieldChanged}
                   value={this.state['image-field']}
                 />
                 <label htmlFor="image-field">Image URL</label>
@@ -44,8 +61,6 @@ class CreatePinDropdown extends Component {
                 <input
                   id="description-field"
                   type="text"
-                  onChange={this.onTextFieldChanged}
-                  onKeyDown={() => console.log('enter bitch')}
                   value={this.state['description-field']}
                 />
                 <label htmlFor="description-field">Pin Description</label>
@@ -58,6 +73,9 @@ class CreatePinDropdown extends Component {
   }
 }
 
-CreatePinDropdown.propTypes = {}
+CreatePinDropdown.propTypes = {
+  toggleAddPinDropdown: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired
+}
 
-export default CreatePinDropdown
+export default connect()(CreatePinDropdown)

@@ -42,8 +42,8 @@ export class App extends Component {
       <div>
         <div>
           <Helmet
-            title="MERN Starter - Blog App"
-            titleTemplate="%s - Blog App"
+            title="PIN IT"
+            titleTemplate="%s"
             meta={[
               { charset: 'utf-8' },
               {
@@ -62,7 +62,7 @@ export class App extends Component {
           />
           {
             this.state.showCreatePinDropdown
-                ? <CreatePinDropdown />
+                ? <CreatePinDropdown toggleAddPinDropdown={this.toggleAddPinDropdown} />
                 : null
           }
           <div className={styles.container}>
