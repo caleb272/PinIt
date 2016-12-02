@@ -61,8 +61,12 @@ app.use(Express.static(path.resolve(__dirname, '../dist')))
 /* passport uses */
 app.use(session({
   secret: 'keyboardcats',
+  name: 'pinit',
   maxAge: 30,
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  proxy: true,
+  resave: true,
+  saveUninitialized: true
 }))
 app.use(passport.initialize())
 app.use(passport.session())
