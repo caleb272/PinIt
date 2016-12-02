@@ -2,6 +2,7 @@ import callApi from '../../util/apiCaller'
 
 export const SET_PINS = 'SET_PINS'
 export const ADD_PIN = 'ADD_PIN'
+export const UPDATE_PIN = 'UPDATE_PIN'
 
 export function requestGetPins() {
   return function dispatchedRequest(dispatch) {
@@ -21,6 +22,14 @@ export function requestCreatePin(image, description) {
 }
 
 
+export function requestUpdatePin(pin) {
+  return function dispatchedRequest(dispatch) {
+    dispatch(updatePin(pin))
+    return callApi('pin', 'PUT', pin.pinDBObject)
+  }
+}
+
+
 export function setPins(pins) {
   return {
     type: SET_PINS,
@@ -32,6 +41,14 @@ export function setPins(pins) {
 export function addPin(pin) {
   return {
     type: ADD_PIN,
+    pin
+  }
+}
+
+
+export function updatePin(pin) {
+  return {
+    type: UPDATE_PIN,
     pin
   }
 }

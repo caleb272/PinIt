@@ -18,15 +18,11 @@ export function getPins(req, res) {
 }
 
 
-function injectUserData(pin) {
-  return User.findById(pin.creator)
+function injectUserData(pinDBObject) {
+  return User.findById(pinDBObject.creator)
     .then(user => {
-      const { image, description, creator, likes } = pin
       return Object({
-        image,
-        description,
-        creator,
-        likes,
+        pinDBObject,
         creatorsProfilePic: user.profilePic
       })
     })
@@ -43,6 +39,14 @@ export function createPin(req, res) {
     .save()
     .then(injectUserData)
     .then(data => res.send({ data }))
+    .catch(err => error(err, res))
+}
+
+
+export function updatePin(req, res) {
+  const pin = req.body
+  Pin.findOneAndUpdate({ _id: pin._id  }, pin)
+    .then(() => res.status(200).end())
     .catch(err => error(err, res))
 }
 
