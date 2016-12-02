@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import PinList from './components/PinList/PinList'
 
 import { requestGetPins, requestUpdatePin } from './PinActions'
-import { getPins } from './PinReducer'
+import { getPins, getUsersPins } from './PinReducer'
 import { getUser } from '../App/AppReducer'
 
 class Pin extends Component {
@@ -67,10 +67,12 @@ Pin.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
+  const userRouteID = props.params.id
+  const pins = userRouteID ? getUsersPins(state, userRouteID) : getPins(state)
   return {
-    pins: getPins(state),
-    user: getUser(state)
+    user: getUser(state),
+    pins
   }
 }
 

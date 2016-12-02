@@ -6,6 +6,11 @@ function Pin(props, context) {
     props.likePin(props.pin)
   }
 
+
+  function usersPins() {
+    context.router.push(`/user/${props.pin.pinDBObject.creator}`)
+  }
+
   return (
     <div className="col s12 m4">
       <div className="card">
@@ -14,7 +19,12 @@ function Pin(props, context) {
         </div>
         <div className="card-content">
           <p className="row">
-            <img src={props.pin.creatorsProfilePic} alt="user" className="circle responsive-img col s2" />
+            <img
+              src={props.pin.creatorsProfilePic}
+              alt="user"
+              className="circle responsive-img col s2"
+              onClick={usersPins}
+            />
             <span className="col s10">
               {props.pin.pinDBObject.description}
               <span className="badge">
@@ -33,7 +43,7 @@ function Pin(props, context) {
   )
 }
 
-Pin.dispatchTypes = {
+Pin.contextTypes = {
   router: PropTypes.object.isRequired
 }
 

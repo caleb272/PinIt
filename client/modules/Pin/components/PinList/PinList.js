@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import Pin from '../Pin/PinListItem'
 
-function PinList(props) {
+function PinList(props, context) {
   return (
     <div className="row">
       {props.pins.map((pin) =>
@@ -15,6 +15,10 @@ function PinList(props) {
       )}
     </div>
   )
+}
+
+PinList.contextTypes = {
+  router: PropTypes.object.isRequired
 }
 
 PinList.propTypes = {

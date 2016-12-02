@@ -16,8 +16,15 @@ const PinReducer = (state = initialState, action) => {
   }
 }
 
+
 export function getPins(state) {
   return state.pin
 }
+
+
+export function getUsersPins(state, userID) {
+  return state.pin.filter(currentPin => currentPin.pinDBObject.creator === userID)
+}
+
 
 export default PinReducer
