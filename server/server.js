@@ -60,7 +60,7 @@ app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }))
 app.use(Express.static(path.resolve(__dirname, '../dist')))
 /* passport uses */
 app.use(session({
-  secret: 'keyboard cat',
+  secret: 'keyboardcats',
   store: new MongoStore({ mongooseConnection: mongoose.connection })
 }))
 app.use(passport.initialize())
@@ -79,7 +79,7 @@ passport.deserializeUser((id, done) => {
   })
 })
 
-console.log('twitter Callback url: ', serverConfig.twitterCallbackURL)
+
 const twitterStrategy = new TwitterStrategy(
   {
     consumerKey: serverConfig.twitterConsumerKey,
