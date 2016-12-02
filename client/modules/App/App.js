@@ -58,7 +58,7 @@ export class App extends Component {
           />
           <Header
             toggleAddPinDropdown={this.toggleAddPinDropdown}
-            isLoggedIn={Boolean(this.props.user)}
+            userID={this.props.user ? this.props.user._id : ''}
           />
           {
             this.state.showCreatePinDropdown

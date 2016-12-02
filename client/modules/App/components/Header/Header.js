@@ -18,8 +18,8 @@ export function Header(props, context) {
         <div className="nav-wrapper z-depth-2">
           <a className="brand-logo left" onClick={goHome}>PIN IT</a>
           {
-            props.isLoggedIn
-                ? <LoggedIn toggleAddPinDropdown={props.toggleAddPinDropdown} />
+            Boolean(props.userID)
+                ? <LoggedIn toggleAddPinDropdown={props.toggleAddPinDropdown} userID={props.userID} />
                 : <LoggedOut />
           }
         </div>
@@ -34,7 +34,7 @@ Header.contextTypes = {
 
 Header.propTypes = {
   toggleAddPinDropdown: React.PropTypes.func.isRequired,
-  isLoggedIn: React.PropTypes.bool.isRequired
+  userID: React.PropTypes.string
 }
 
 export default Header
