@@ -60,8 +60,13 @@ app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }))
 app.use(Express.static(path.resolve(__dirname, '../dist')))
 /* passport uses */
 app.use(session({
-  secret: 'keyboard cat',
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
+  secret: 'keyboardcats',
+  name: 'pinit',
+  maxAge: 30,
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  proxy: true,
+  resave: true,
+  saveUninitialized: true
 }))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -78,6 +83,7 @@ passport.deserializeUser((id, done) => {
     done(err, user)
   })
 })
+
 
 const twitterStrategy = new TwitterStrategy(
   {
@@ -145,7 +151,7 @@ const renderFullPage = (html, initialState) => {
 
         ${process.env.NODE_ENV === 'production' ? `<link rel='stylesheet' href='${assetsManifest['/app.css']}' />` : ''}
         <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700' rel='stylesheet' type='text/css'/>
-        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
       </head>
       <body>
@@ -159,7 +165,6 @@ const renderFullPage = (html, initialState) => {
         </script>
         <script src='${process.env.NODE_ENV === 'production' ? assetsManifest['/vendor.js'] : '/vendor.js'}'></script>
         <script src='${process.env.NODE_ENV === 'production' ? assetsManifest['/app.js'] : '/app.js'}'></script>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
       </body>
