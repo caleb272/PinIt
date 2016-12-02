@@ -68,7 +68,7 @@ app.use(passport.session())
 /* end of passport uses */
 app.use('/api', api)
 
-/* PASSPORT STUFF */
+/* PASSPORT SETUP AND ROUTING */
 passport.serializeUser((user, done) => {
   done(null, user._id)
 })
@@ -120,7 +120,7 @@ app.get('/logout', (req, res) => {
 app.get('/api/user', (req, res) => {
   res.send({ data: (req.user || null) })
 })
-/* END OF PASSPORT STUFF */
+/* END OF PASSPORT SETUP AND ROUTING */
 
 
 // Render Initial HTML
