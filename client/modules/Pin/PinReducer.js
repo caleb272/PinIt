@@ -1,4 +1,4 @@
-import { SET_PINS, ADD_PIN, UPDATE_PIN } from './PinActions'
+import { SET_PINS, ADD_PIN, UPDATE_PIN, DELETE_PIN } from './PinActions'
 
 // Initial State
 const initialState = []
@@ -11,6 +11,8 @@ const PinReducer = (state = initialState, action) => {
       return [action.pin, ...state]
     case UPDATE_PIN:
       return state.map(pin => (pin.pinDBObject._id === action.pin.pinDBObject._id ? action.pin : pin))
+    case DELETE_PIN:
+      return state.filter(pin => pin !== action.pin)
     default:
       return state
   }

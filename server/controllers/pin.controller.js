@@ -44,15 +44,15 @@ export function createPin(req, res) {
 
 
 export function updatePin(req, res) {
-  // new Pin({
-  //   image: 'https://ledroideenchaine.com/wp-content/uploads/2016/08/Legacy-code.jpg',
-  //   description: 'user 123',
-  //   creator: '123',
-  //   likes: ['123']
-  // }).save()
-
   const pin = req.body
   Pin.findOneAndUpdate({ _id: pin._id  }, pin)
+    .then(() => res.status(200).end())
+    .catch(err => error(err, res))
+}
+
+
+export function deletePin(req, res) {
+  Pin.findOneAndRemove(req.body)
     .then(() => res.status(200).end())
     .catch(err => error(err, res))
 }

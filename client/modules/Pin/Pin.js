@@ -2,13 +2,13 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import PinList from './components/PinList/PinList'
 
-import { requestGetPins, requestUpdatePin } from './PinActions'
+import { requestGetPins, requestUpdatePin, requestDeletePin } from './PinActions'
 import { getPins, getUsersPins } from './PinReducer'
 import { getUser } from '../App/AppReducer'
 
 class Pin extends Component {
-  constructor(props) {
-    super(props)
+  constructor(props, context) {
+    super(props, context)
 
     this.likePin = this.likePin.bind(this)
     this.deletePin = this.deletePin.bind(this)
@@ -24,24 +24,26 @@ class Pin extends Component {
     if (!this.props.user) {
       return
     }
+
     const pin = injectedPin.pinDBObject
     const userID = this.props.user._id
-    if (!hasUserLiked(pin, userID)) {
+    if (!this.hasUserLikedPin(pin, userID)) {
       pin.likes.push(userID)
     } else {
       pin.likes = pin.likes.filter(currentUserID => currentUserID !== userID)
     }
+
     this.props.dispatch(requestUpdatePin(injectedPin))
+  }
 
 
-    function hasUserLiked(pin, userID) {
-      return pin.likes.indexOf(userID) !== -1
-    }
+  hasUserLikedPin(pin, userID) {
+    return pin.likes.indexOf(userID) !== -1
   }
 
 
   deletePin(pin) {
-    console.log('deleting the pin: ', pin)
+    this.props.dispatch(requestDeletePin(pin))
   }
 
 
@@ -50,7 +52,7 @@ class Pin extends Component {
       <PinList
         pins={this.props.pins}
         likePin={this.likePin}
-        deletePin={this.deletePin}
+        deletePin={!this.context.router.isActive('/', true) ? this.deletePin : null}
         userID={this.props.user ? this.props.user._id : ''}
       />
     )
@@ -60,6 +62,10 @@ class Pin extends Component {
 Pin.need = [
   () => requestGetPins()
 ]
+
+Pin.contextTypes = {
+  router: PropTypes.object.isRequired
+}
 
 Pin.propTypes = {
   pins: PropTypes.array.isRequired,

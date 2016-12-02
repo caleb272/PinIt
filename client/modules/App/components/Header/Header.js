@@ -7,8 +7,8 @@ import styles from './Header.css'
 
 export function Header(props, context) {
   function goHome() {
-    if (!context.router.isActive('')) {
-      context.router.go('')
+    if (!context.router.isActive('/', true)) {
+      context.router.push('/')
     }
   }
 

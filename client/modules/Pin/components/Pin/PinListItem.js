@@ -2,8 +2,29 @@ import React, { PropTypes } from 'react'
 
 function Pin(props, context) {
   const hasUserLiked = (props.pin.pinDBObject.likes.indexOf(props.userID) !== -1)
+  const showDeleteButton = Boolean(props.deletePin && props.pin.pinDBObject.creator === props.userID)
+  const likeButton = (
+    <i
+      className="material-icons right"
+      style={hasUserLiked ? { color: '#ff80ab' } : {}}
+      onClick={like}
+    >favorite</i>
+  )
+  const deleteButton = (
+    <i
+      className="material-icons right"
+      style={{ color: '#ff1744' }}
+      onClick={deletePin}
+    >delete</i>
+  )
+
   function like() {
     props.likePin(props.pin)
+  }
+
+
+  function deletePin() {
+    props.deletePin(props.pin)
   }
 
 
@@ -29,11 +50,7 @@ function Pin(props, context) {
               {props.pin.pinDBObject.description}
               <span className="badge">
                 {props.pin.pinDBObject.likes.length}
-                <i
-                  className="material-icons right"
-                  style={hasUserLiked ? { color: 'pink' } : {}}
-                  onClick={like}
-                >favorite</i>
+                {showDeleteButton ? deleteButton : likeButton}
               </span>
             </span>
           </p>
@@ -50,11 +67,8 @@ Pin.contextTypes = {
 Pin.propTypes = {
   pin: PropTypes.object.isRequired,
   likePin: PropTypes.func.isRequired,
-  deletePin: PropTypes.func.isRequired,
+  deletePin: PropTypes.func,
   userID: PropTypes.string
 }
 
 export default Pin
-
-
-// <i className="material-icons right">delete</i>

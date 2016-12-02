@@ -32,7 +32,7 @@ export default (
       }}
     />
     <Route
-      path="/user/:id"
+      path="user/:id"
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
           cb(null, require('./modules/Pin/Pin').default)

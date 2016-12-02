@@ -24,7 +24,7 @@ PinList.contextTypes = {
 PinList.propTypes = {
   pins: PropTypes.array.isRequired,
   likePin: PropTypes.func.isRequired,
-  deletePin: PropTypes.func.isRequired,
+  deletePin: PropTypes.func,
   userID: PropTypes.string
 }
 
