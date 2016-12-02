@@ -11,6 +11,7 @@ export function requireLoggedIn(req, res, next) {
 
 export function getPins(req, res) {
   Pin.find()
+    .sort({ _id: -1 })
     .then(pins => Promise.all(pins.map(injectUserData)))
     .then(userDataInjectedPins => res.status(200).send({ data: userDataInjectedPins }))
     .catch(err => error(err, res))
