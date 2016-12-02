@@ -79,6 +79,7 @@ passport.deserializeUser((id, done) => {
   })
 })
 
+console.log('twitter Callback url: ', serverConfig.twitterCallbackURL)
 const twitterStrategy = new TwitterStrategy(
   {
     consumerKey: serverConfig.twitterConsumerKey,
